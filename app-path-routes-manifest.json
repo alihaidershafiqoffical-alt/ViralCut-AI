@@ -1,0 +1,15 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/automatic-caption-generator/page": "/automatic-caption-generator",
+  "/dashboard/page": "/dashboard",
+  "/editor/page": "/editor",
+  "/favicon.ico/route": "/favicon.ico",
+  "/long-video-to-shorts/page": "/long-video-to-shorts",
+  "/opengraph-image/route": "/opengraph-image",
+  "/page": "/",
+  "/podcast-to-shorts/page": "/podcast-to-shorts",
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/youtube-shorts-generator/page": "/youtube-shorts-generator"
+}
