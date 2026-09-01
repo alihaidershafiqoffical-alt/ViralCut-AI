@@ -1,0 +1,75 @@
+# =============================================================================
+# ViralCut AI Shorts Generator — Local Multi-Service Compose Configuration
+# =============================================================================
+# Runs Redis, FastAPI Backend, and Celery Worker locally with a single command:
+#   docker-compose up --build
+# =============================================================================
+
+version: "3.8"
+
+services:
+  # ── Redis (Job Queue & Cache) ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: viralcut-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # ── FastAPI Backend API ───────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: viralcut-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PROJECT_NAME=ViralCut Backend
+      - API_V1_STR=/api/v1
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-1.5-flash}
+      - ALLOWED_CORS_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000"]
+      - TEMP_STORAGE_DIR=/app/temp_uploads
+    volumes:
+      - shared_temp_storage:/app/temp_uploads
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Celery Background Worker & AI Pipeline ────────────────────────────────
+  worker:
+    build:
+      context: .
+      dockerfile: agent/Dockerfile
+    container_name: viralcut-worker
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-1.5-flash}
+      - WHISPER_MODEL_SIZE=${WHISPER_MODEL_SIZE:-base}
+      - WHISPER_DEVICE=cpu
+      - TEMP_STORAGE_DIR=/app/backend/temp_uploads
+    volumes:
+      - shared_temp_storage:/app/backend/temp_uploads
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  shared_temp_storage:
