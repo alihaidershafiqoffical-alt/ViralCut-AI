@@ -122,7 +122,6 @@ export default function LandingPageLayout({
   };
 
   const handleGenerate = async (newConfig: ShortsConfig) => {
-    setConfig(newConfig);
     setStage("processing");
     setProgress(5);
     setCurrentStageId(1);
@@ -158,7 +157,6 @@ export default function LandingPageLayout({
   const handleStartOver = () => {
     setStage("input");
     setSource(null);
-    setConfig(null);
     setClips([]);
     setCurrentJobId(null);
     setCurrentAccessToken(null);
