@@ -1,0 +1,249 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   THEME TOKENS
+   ============================================================ */
+@theme inline {
+  /* Shadcn color bridge */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  /* ViralCut brand palette */
+  --color-vc-violet:   #7c3aed; /* primary CTA */
+  --color-vc-indigo:   #4f46e5; /* secondary accent */
+  --color-vc-pink:     #ec4899; /* hot highlight */
+  --color-vc-emerald:  #10b981; /* success / score */
+  --color-vc-surface:  #0d0e1a; /* page background */
+  --color-vc-card:     #12141f; /* card background */
+  --color-vc-elevated: #1a1c2e; /* elevated surface */
+  --color-vc-border:   rgba(124,58,237,0.18); /* default border */
+
+  /* Named animations */
+  --animate-fade-in:     fade-in      0.45s ease-out both;
+  --animate-slide-up:    slide-up     0.5s  ease-out both;
+  --animate-slide-down:  slide-down   0.3s  ease-out both;
+  --animate-scale-in:    scale-in     0.3s  ease-out both;
+  --animate-float:       float        6s    ease-in-out infinite;
+  --animate-shimmer:     shimmer      2.2s  linear   infinite;
+  --animate-spin-slow:   spin-slow    3s    linear   infinite;
+  --animate-pulse-text:  pulse-text   2s    ease-in-out infinite;
+}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes fade-in   { from{opacity:0}           to{opacity:1}                  }
+@keyframes slide-up  { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slide-down{ from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes scale-in  { from{opacity:0;transform:scale(0.94)} to{opacity:1;transform:scale(1)} }
+@keyframes float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes shimmer   { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+@keyframes spin-slow { to{transform:rotate(360deg)} }
+@keyframes pulse-text{
+  0%,100%{opacity:1}
+  50%{opacity:0.5}
+}
+@keyframes gradient-shift {
+  0%   { background-position:0% 50%   }
+  50%  { background-position:100% 50% }
+  100% { background-position:0% 50%   }
+}
+@keyframes progress-fill {
+  from { width: 0% }
+}
+@keyframes drop-glow {
+  0%,100%{ box-shadow: 0 0 0 0   rgba(124,58,237,0.0); }
+  50%    { box-shadow: 0 0 32px 4px rgba(124,58,237,0.35); }
+}
+
+/* ============================================================
+   CSS VARIABLES — DARK-FIRST DESIGN SYSTEM
+   ============================================================ */
+:root {
+  /* Shadcn Radix tokens — mapped to ViralCut dark palette */
+  --background:           oklch(0.075 0.018 270);
+  --foreground:           oklch(0.96  0.005 270);
+  --card:                 oklch(0.10  0.018 270);
+  --card-foreground:      oklch(0.96  0.005 270);
+  --popover:              oklch(0.10  0.018 270);
+  --popover-foreground:   oklch(0.96  0.005 270);
+  --primary:              oklch(0.58  0.26  285);   /* violet */
+  --primary-foreground:   oklch(0.99  0     0);
+  --secondary:            oklch(0.17  0.018 270);
+  --secondary-foreground: oklch(0.90  0.005 270);
+  --muted:                oklch(0.17  0.018 270);
+  --muted-foreground:     oklch(0.58  0.012 270);
+  --accent:               oklch(0.20  0.022 270);
+  --accent-foreground:    oklch(0.96  0.005 270);
+  --destructive:          oklch(0.63  0.22  25);
+  --border:               oklch(0.23  0.018 270);
+  --input:                oklch(0.20  0.018 270);
+  --ring:                 oklch(0.58  0.26  285);
+  --radius:               0.75rem;
+  --sidebar:              oklch(0.09  0.018 270);
+  --sidebar-foreground:   oklch(0.96  0.005 270);
+  --sidebar-primary:      oklch(0.58  0.26  285);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent:       oklch(0.17  0.022 270);
+  --sidebar-accent-foreground: oklch(0.96 0.005 270);
+  --sidebar-border:       oklch(0.23  0.018 270);
+  --sidebar-ring:         oklch(0.58  0.26  285);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+  html {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-color: var(--color-vc-surface);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  /* Custom scrollbar */
+  ::-webkit-scrollbar       { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.30 0.018 270);
+    border-radius:3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.42 0.018 270);
+  }
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+
+/* — Gradient text — */
+.gradient-text {
+  background: linear-gradient(135deg, #a78bfa, #ec4899, #60a5fa);
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* — Violet-to-indigo CTA gradient — */
+.gradient-cta {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.gradient-cta:hover  { opacity: 0.88; transform: translateY(-1px); }
+.gradient-cta:active { transform: translateY(0); }
+
+/* — Glass surface — */
+.glass {
+  background: rgba(18, 20, 31, 0.65);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(124, 58, 237, 0.14);
+}
+.glass:hover {
+  border-color: rgba(124, 58, 237, 0.30);
+}
+
+/* — Glow border on focus / active drop — */
+.drop-zone-active {
+  border-color: #7c3aed !important;
+  animation: drop-glow 1.5s ease-in-out infinite;
+  background: rgba(124,58,237,0.08) !important;
+}
+
+/* — Shimmer loading bar — */
+.shimmer-bar {
+  background: linear-gradient(
+    90deg,
+    rgba(124,58,237,0.20) 0%,
+    rgba(167,139,250,0.60) 50%,
+    rgba(124,58,237,0.20) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+
+/* — Pill button base — */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid oklch(0.30 0.025 270);
+  padding: 0.375rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: oklch(0.70 0.012 270);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+.pill:hover {
+  border-color: #7c3aed;
+  color: #a78bfa;
+  background: rgba(124,58,237,0.10);
+}
+.pill-active {
+  border-color: #7c3aed !important;
+  background: rgba(124,58,237,0.18) !important;
+  color: #a78bfa !important;
+  box-shadow: 0 0 0 1px rgba(124,58,237,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* — Viral score badge gradient — */
+.score-badge {
+  background: linear-gradient(90deg, #7c3aed, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* — Section fade-in stagger — */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.12s; }
+.stagger-3 { animation-delay: 0.20s; }
+.stagger-4 { animation-delay: 0.28s; }
